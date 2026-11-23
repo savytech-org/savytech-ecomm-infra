@@ -1,0 +1,55 @@
+
+name: Terraform Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-eks
+  cancel-in-progress: false
+
+jobs:
+
+  # Phase 1: Terraform Security Scan
+  tfsec:
+    name: Security Scan (tfsec)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          soft_fail: true
+
+  # Phase 2: SonarQube Code Quality Scan
+  sonar-scan:
+    name: SonarQube Analysis
+    needs: tfsec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=terraform-infra
+            -Dsonar.projectName="Terraform Infra"
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/.terraform/**,**/*.tfstate
+            -Dsonar.qualitygate.wait=true
