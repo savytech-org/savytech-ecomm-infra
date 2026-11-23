@@ -65,11 +65,11 @@ variable "cluster_endpoint_public_access_cidrs" {
   default     = ["0.0.0.0/0"]
 }
 
-# variable "cluster_admin_arns" {
-#   description = "Extra IAM users/roles that get cluster-admin. The identity that runs terraform apply (the GitHub OIDC role) is admin automatically, so do NOT list it here."
-#   type        = list(string)
-#   default     = ["arn:aws:iam::060647991200:user/terraform"]
-# }
+variable "cluster_admin_arns" {
+  description = "Extra IAM users/roles that get cluster-admin. The identity that runs terraform apply (the GitHub OIDC role) is admin automatically, so do NOT list it here."
+  type        = list(string)
+  default     = ["arn:aws:iam::957950410048:role/gitaction-authentication-role"]
+}
 
 # ---- Worker nodes ----
 variable "node_instance_types" {
