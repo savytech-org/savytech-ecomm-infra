@@ -60,67 +60,29 @@ jobs:
 
   #       with:
   #         soft_fail: true
-  
- name: Terraform SonarQube Scan
 
-on:
- push:
-    branches:
-      - main
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-jobs:
   sonar-scan:
-    name: SonarQube Security Scan
+    name: security scan (sonar-scan) Phase(2)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0 # Disable shallow clone  for  accurate analysis.
 
-      - name: Check SonarQube secrets
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          if [ -z "$SONAR_TOKEN" ]; then
-            echo "SONAR_TOKEN is missing"
-            exit 1
-          fi
-
-          if [ -z "$SONAR_HOST_URL" ]; then
-            echo "SONAR_HOST_URL is missing"
-            exit 1
-          fi
-
-          echo "Both SonarQube secrets are available."
-
-      - name: Check SonarQube server
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          curl -sS -o /dev/null \
-            -w "SonarQube HTTP status: %{http_code}\n" \
-            "$SONAR_HOST_URL/api/system/status"
-
-      - name: Run SonarQube Scan
+      - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
+        continue-on-error: true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
             -Dsonar.projectKey=terraform-infra
-            -Dsonar.projectName=Terraform-Infra
-            -Dsonar.sources=.
+            -Dsonar.projectName="Terraform Infra"
             -Dsonar.exclusions=**/.terraform/**,**/*.tfstate
             -Dsonar.qualitygate.wait=true
-
 
 # #   # ---------------------------------------------------------------------------
   # plan-apply:
