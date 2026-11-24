@@ -48,18 +48,18 @@ jobs:
   #       run: terraform validate
 
 #   # ---------------------------------------------------------------------------
-  # tfsec:
-  #   name: security scan (tfsec) Phase(1)
-  #   needs: [init]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v7
+  tfsec:
+    name: security scan (tfsec) Phase(1)
+    needs: [init]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
 
-  #     - name: tfsec
-  #       uses: aquasecurity/tfsec-action@v1.0.3
+      - name: tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
 
-  #       with:
-  #         soft_fail: true
+        with:
+          soft_fail: true
 
   sonar-scan:
     name: security scan (sonar-scan) Phase(2)
