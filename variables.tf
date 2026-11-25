@@ -2,7 +2,7 @@
 variable "aws_region" {
   description = "AWS region to deploy into"
   type        = string
-  default     = "eu-west-1"
+  default     = "us-east-1"
 }
 
 variable "cluster_name" {
@@ -68,7 +68,7 @@ variable "cluster_endpoint_public_access_cidrs" {
 variable "cluster_admin_arns" {
   description = "Extra IAM users/roles that get cluster-admin. The identity that runs terraform apply (the GitHub OIDC role) is admin automatically, so do NOT list it here."
   type        = list(string)
-  default     = ["arn:aws:iam::957950410048:role/gitaction-authentication-role"]
+  default     = []
 }
 
 # ---- Worker nodes ----
@@ -168,7 +168,7 @@ variable "letsencrypt_email" {
 variable "argocd_hostname" {
   description = "Public hostname for the Argo CD UI (must match manifests/argocd-ingress.yaml)"
   type        = string
-  default     = "argocd.dili9ja.shop"
+  default     = "argocd.savytech.online"
 }
 
 # ---- EFS ----
@@ -182,7 +182,7 @@ variable "efs_transition_to_ia" {
 variable "kubeconfig_bucket" {
   description = "S3 bucket where the admin kubeconfig is uploaded"
   type        = string
-  default     = "savytech-s3-bucket-957950410048"
+  default     = "savytech-s3-bucket1"
 }
 
 variable "kubeconfig_s3_key" {

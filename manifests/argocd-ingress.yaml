@@ -12,10 +12,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - argocd.dili9ja.shop
+        - argocd.savytech.online
       secretName: argocd-server-tls
   rules:
-    - host: argocd.dili9ja.shop
+    - host: argocd.savytech.online
       http:
         paths:
           - path: /
